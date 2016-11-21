@@ -1,0 +1,37 @@
+{
+  "private": true,
+  "name": "pixi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "compile": "fable .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "core-js": "^2.4.0",
+    "fable-core": "^0.6.1",
+    "requirejs": "^2.2.0"
+  },
+  "engines": {
+    "fable": "^0.6.4"
+  },
+  "devDependencies": {
+    "fable-import-pixi": "0.0.1",
+    "chai": "~1.9.2",
+    "coffee-script": "1.9.0",
+    "gulp": "^3.9.0",
+    "gulp-gh-pages": "^0.5.2",
+    "gulp-shell": "^0.4.2",
+    "gulp-webserver": "^0.9.1",
+    "liquid.coffee": "^0.1.2",
+    "mkdirp": "^0.5.1",
+    "mocha": "~2.0.1",
+    "morgan": "^1.6.1",
+    "nw": "^0.17.3",
+    "walker": "^1.0.7"
+  }
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/bruce/Documents/GitHub/map-reduce-ecs/FSharpGame/Content/images/BackdropBlackLittleSparkBlack.png</File>
+    <File>C:/Users/bruce/Documents/GitHub/map-reduce-ecs/FSharpGame/Content/images/bullet.png</File>
+    <File>C:/Users/bruce/Documents/GitHub/map-reduce-ecs/FSharpGame/Content/images/enemy1.png</File>
+    <File>C:/Users/bruce/Documents/GitHub/map-reduce-ecs/FSharpGame/Content/images/enemy2.png</File>
+    <File>C:/Users/bruce/Documents/GitHub/map-reduce-ecs/FSharpGame/Content/images/enemy3.png</File>
+    <File>C:/Users/bruce/Documents/GitHub/map-reduce-ecs/FSharpGame/Content/images/explosion.png</File>
+    <File>C:/Users/bruce/Documents/GitHub/map-reduce-ecs/FSharpGame/Content/images/fighter.png</File>
+    <File>C:/Users/bruce/Documents/GitHub/map-reduce-ecs/FSharpGame/Content/images/particle.png</File>
+    <File>C:/Users/bruce/Documents/GitHub/map-reduce-ecs/FSharpGame/Content/images/star.png</File>
+    <File>C:/Users/bruce/Documents/GitHub/map-reduce-ecs/FSharpGame/Content/images/tom-thumb-white.png</File>
+    <File>C:/Users/bruce/Documents/GitHub/map-reduce-ecs/FSharpGame/Content/images/bang.png</File>
+  </SourceFiles>
+</SourceFileCollection>
