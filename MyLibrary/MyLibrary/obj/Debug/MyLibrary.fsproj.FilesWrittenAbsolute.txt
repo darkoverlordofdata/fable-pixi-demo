@@ -1,0 +1,6 @@
+/media/bruce/windows/Users/darko/Documents/GitHub/fable-pixi-demo/MyLibrary/MyLibrary/obj/Debug/.NETFramework,Version=v4.0.AssemblyAttribute.fs
+/media/bruce/windows/Users/darko/Documents/GitHub/fable-pixi-demo/MyLibrary/MyLibrary/bin/Debug/MyLibrary.dll.mdb
+/media/bruce/windows/Users/darko/Documents/GitHub/fable-pixi-demo/MyLibrary/MyLibrary/bin/Debug/MyLibrary.dll
+/media/bruce/windows/Users/darko/Documents/GitHub/fable-pixi-demo/MyLibrary/MyLibrary/obj/Debug/MyLibrary.dll
+/media/bruce/windows/Users/darko/Documents/GitHub/fable-pixi-demo/MyLibrary/MyLibrary/obj/Debug/MyLibrary.dll.mdb
+/media/bruce/windows/Users/darko/Documents/GitHub/fable-pixi-demo/MyLibrary/MyLibrary/bin/Debug/FSharp.Core.dll

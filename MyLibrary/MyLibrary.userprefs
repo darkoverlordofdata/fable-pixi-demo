@@ -1,0 +1,12 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workbench ActiveDocument="MyLibrary/Library1.fs">
+    <Files>
+      <File FileName="MyLibrary/Library1.fs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

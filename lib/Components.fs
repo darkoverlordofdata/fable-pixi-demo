@@ -1,9 +1,9 @@
 ﻿[<AutoOpen>]
 module ComponentsModule
 open System
-open Microsoft.Xna.Framework
-open Microsoft.Xna.Framework.Graphics
-open Microsoft.Xna.Framework.Content
+// open Microsoft.Xna.Framework
+// open Microsoft.Xna.Framework.Graphics
+// open Microsoft.Xna.Framework.Content
 (**
  * Component Factory
  *

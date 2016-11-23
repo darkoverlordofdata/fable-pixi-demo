@@ -1,0 +1,8 @@
+C:\Users\darko\Documents\GitHub\fable-pixi-demo\MyLibrary\MyLibrary\bin\Debug\MyLibrary.XML
+C:\Users\darko\Documents\GitHub\fable-pixi-demo\MyLibrary\MyLibrary\bin\Debug\MyLibrary.dll
+C:\Users\darko\Documents\GitHub\fable-pixi-demo\MyLibrary\MyLibrary\bin\Debug\MyLibrary.pdb
+C:\Users\darko\Documents\GitHub\fable-pixi-demo\MyLibrary\MyLibrary\bin\Debug\FSharp.Core.dll
+C:\Users\darko\Documents\GitHub\fable-pixi-demo\MyLibrary\MyLibrary\bin\Debug\FSharp.Core.xml
+C:\Users\darko\Documents\GitHub\fable-pixi-demo\MyLibrary\MyLibrary\obj\Debug\MyLibrary.dll
+C:\Users\darko\Documents\GitHub\fable-pixi-demo\MyLibrary\MyLibrary\obj\Debug\MyLibrary.pdb
+C:\Users\darko\Documents\GitHub\fable-pixi-demo\MyLibrary\MyLibrary\obj\Debug\MyLibrary.fsprojResolveAssemblyReference.cache

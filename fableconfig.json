@@ -1,9 +1,12 @@
 {
     "module": "amd",
     "sourceMaps": true,
-    "projFile": "./lib/Program.fsx",
+    "projFile": "lib/Program.fsx",
     "outDir": "web/src",
+    "refs": {
+        "Fable.Core": "fable-core",
+        "MyLibrary": "src/MyLibrary"
+    },
     "scripts": {
-        "prebuild": "npm install"
     }
 }
