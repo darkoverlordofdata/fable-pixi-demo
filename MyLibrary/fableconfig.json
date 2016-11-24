@@ -1,9 +1,0 @@
-{
-    "module": "amd",
-    "sourceMaps": true,
-    "dll": true,
-    "projFile": "MyLibrary/MyLibrary.fsproj",
-    "outDir": "../web/src/MyLibrary",
-    "scripts": {
-    }
-}
