@@ -3,76 +3,40 @@
 #r "../node_modules/fable-core/Fable.Core.dll"
 #load "../node_modules/fable-import-pixi/Fable.Import.Pixi.fs"
 
+#load "./Input/Mouse.fsx"
+#load "./Input/Keyboard.fsx"
+
 open Fable.Core
 open Fable.Import
 open Fable.Import.Browser
 open Fable.Core.JsInterop
-
-module Mouse =
-    let mutable down = false
-    let mutable buttonDown = false
-    let mutable position = PIXI.Point(0., 0.)
-    let onTouchStart(e: TouchEvent) =
-        let event = e.targetTouches.[0]
-        down <- true
-        buttonDown <- true
-        position.x <- event.clientX
-        position.y <- event.clientY
-        null
-
-    let onTouchMove(e: TouchEvent) =
-        let event = e.targetTouches.[0]
-        position.x <- event.clientX
-        position.y <- event.clientY
-        null
-        
-    let onTouchEnd(e: TouchEvent) =
-        down <- false
-        buttonDown <- false
-        null
-        
-    let onMouseStart(e: MouseEvent) =
-        down <- true
-        buttonDown <- true
-        position.x <- e.clientX
-        position.y <- e.clientY
-        null
-
-    let onMouseMove(e: MouseEvent) =
-        position.x <- e.clientX
-        position.y <- e.clientY
-        null
-
-    let onMouseEnd(e: MouseEvent) =
-        down <- false
-        buttonDown <- false
-        null
-
-    let init () =
-        document.addEventListener_touchstart(fun e -> onTouchStart(e) )
-        document.addEventListener_touchmove(fun e -> onTouchMove(e) )
-        document.addEventListener_touchend(fun e -> onTouchEnd(e) )
-
-        document.addEventListener_mousedown(fun e -> onMouseStart(e) )
-        document.addEventListener_mousemove(fun e -> onMouseMove(e) )
-        document.addEventListener_mouseup(fun e -> onMouseEnd(e) )
-
-module Keyboard =
-    let mutable keysPressed = Set.empty
-    let reset () = keysPressed <- Set.empty
-    let isPressed keyCode = Set.contains keyCode keysPressed
-    let update (e : KeyboardEvent, pressed) =
-        let keyCode = int e.keyCode
-        let op = if pressed then Set.add else Set.remove
-        keysPressed <- op keyCode keysPressed
-        null
-    let init () =
-        window.addEventListener_keydown(fun e -> update(e, true))
-        window.addEventListener_keyup(fun e -> update(e, false))
+open Mouse
+open Keyboard
 
 type Color = 
     | White = 0xffffff
+    | AliceBlue = 0xf0f8ff
+    | AntiqueWhite = 0xfaebd7
+    | Aqua = 0x00ffff
+    | Aquamarine = 0x7fffd4
+    | Azure = 0xf0ffff
+    | Beige = 0xf5f5dc
+    | Bisque = 0xffe4c4
     | Black = 0x000000
+    | BlanchedAlmond = 0xffebcd
+    | Blue = 0x0000ff
+    | BlueViolet = 0x8a2be2
+    | Brown = 0xa52a2a
+    | BurlyWood = 0xdeb887
+    | CadetBlue = 0x5f9ea0
+    | Chartreuse = 0x7fff00
+    | Chocolate = 0xd2691e
+    | Coral = 0xff7f50
+    | CornflowerBlue = 0x6495ed
+    | Cornsilk = 0xfff8dc
+    | Crimson = 0xdc143c
+    | Cyan = 0x00ffff
+    
     | GreenYellow = 0xadff2f
     | LightGoldenrodYellow = 0xfafad2
     | PaleGoldenrod = 0xeee8aa
@@ -847,10 +811,10 @@ type ShmupWarz(height, width0, mobile) as this =
                 match entity.Tint with 
                 | Some(color) -> color
                 | None -> Color.White
-            sprite.tint <- float color
             sprite.x <- entity.Position.x
             sprite.y <- entity.Position.y
             sprite.scale <- scale
+            sprite.tint <- float color
             spriteBatch.addChild(sprite) |> ignore
 
         | None -> ()
