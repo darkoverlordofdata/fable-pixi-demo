@@ -1,23 +1,21 @@
 <!doctype html>
 <html>
 <head>
-  <title>Fable + Pixi.js</title>
+  <title>Fable ShmupWarz</title>
   <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
 </head>
 <body>
-	<h1>Fable + Pixi.js</h1>
-  
-  <script src="src/system.js/system.js"></script>
-  <script>
-    System.defaultJSExtensions = true;
-		System.config({
-			map: { 
-        'core-js'   : 'src/core-js/core.min',   
-        'fable-core': 'src/fable-core/umd',
-        'PIXI'      : 'src/pixi.js/pixi.min'
-      }
-		});
-		SystemJS.import('src/ShmupWarz/Program.js');
-  </script>
 </body>
+<script src="src/system.js/system.js"></script>
+<script>
+  System.defaultJSExtensions = true;
+  System.config({
+    map: { 
+      'core-js'   : 'src/core-js/core.min',   
+      'fable-core': 'src/fable-core/umd',
+      'PIXI'      : 'src/pixi.js/pixi.min'
+    }
+  });
+  SystemJS.import('src/ShmupWarz/Program.js');
+</script>
 </html>

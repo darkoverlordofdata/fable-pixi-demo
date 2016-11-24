@@ -9,47 +9,45 @@ open Fable.Import.Browser
 open Fable.Core.JsInterop
 
 module Mouse =
-    let mutable mouseDown = false
-    let mutable mouseButtonDown = false
-    let mutable mousePosition = PIXI.Point(0., 0.)
-
+    let mutable down = false
+    let mutable buttonDown = false
+    let mutable position = PIXI.Point(0., 0.)
     let onTouchStart(e: TouchEvent) =
         let event = e.targetTouches.[0]
-        mouseDown <- true
-        mouseButtonDown <- true
-        mousePosition.x <- event.clientX
-        mousePosition.y <- event.clientY
+        down <- true
+        buttonDown <- true
+        position.x <- event.clientX
+        position.y <- event.clientY
         null
 
     let onTouchMove(e: TouchEvent) =
         let event = e.targetTouches.[0]
-        mousePosition.x <- event.clientX
-        mousePosition.y <- event.clientY
+        position.x <- event.clientX
+        position.y <- event.clientY
         null
         
     let onTouchEnd(e: TouchEvent) =
-        mouseDown <- false
-        mouseButtonDown <- false
+        down <- false
+        buttonDown <- false
         null
         
     let onMouseStart(e: MouseEvent) =
-        mouseDown <- true
-        mouseButtonDown <- true
-        mousePosition.x <- e.clientX
-        mousePosition.y <- e.clientY
+        down <- true
+        buttonDown <- true
+        position.x <- e.clientX
+        position.y <- e.clientY
         null
 
     let onMouseMove(e: MouseEvent) =
-        mousePosition.x <- e.clientX
-        mousePosition.y <- e.clientY
+        position.x <- e.clientX
+        position.y <- e.clientY
         null
 
     let onMouseEnd(e: MouseEvent) =
-        mouseDown <- false
-        mouseButtonDown <- false
+        down <- false
+        buttonDown <- false
         null
 
-    /// Register DOM event handlers
     let init () =
         document.addEventListener_touchstart(fun e -> onTouchStart(e) )
         document.addEventListener_touchmove(fun e -> onTouchMove(e) )
@@ -60,25 +58,21 @@ module Mouse =
         document.addEventListener_mouseup(fun e -> onMouseEnd(e) )
 
 module Keyboard =
-    /// Set of currently pressed keys
     let mutable keysPressed = Set.empty
-    /// Update the keys as requested
     let reset () = keysPressed <- Set.empty
     let isPressed keyCode = Set.contains keyCode keysPressed
-    /// Triggered when key is pressed/released
     let update (e : KeyboardEvent, pressed) =
         let keyCode = int e.keyCode
         let op = if pressed then Set.add else Set.remove
         keysPressed <- op keyCode keysPressed
         null
-    /// Register DOM event handlers
     let init () =
         window.addEventListener_keydown(fun e -> update(e, true))
         window.addEventListener_keyup(fun e -> update(e, false))
 
 type Color = 
-    | Black = 0xffffff
-    | White = 0x000000
+    | White = 0xffffff
+    | Black = 0x000000
     | GreenYellow = 0xadff2f
     | LightGoldenrodYellow = 0xfafad2
     | PaleGoldenrod = 0xeee8aa
@@ -119,7 +113,6 @@ type Game(width, height, images) as this =
     abstract member Draw: float -> unit
     member this.Run() =
         for (a, b) in images do PIXI.Globals.loader?add(a, b) |> ignore    
-    
         PIXI.Globals.loader.load(System.Func<_,_,_>(fun loader resources ->
             this.Content <- resources
             this.Initialize()
@@ -179,8 +172,8 @@ let CreateHealth(curHealth: int, maxHealth : int) =
         MaxHealth = maxHealth;
     }
 
-(** ScaleAnimation Component *)
-type ScaleAnimation =
+(** Tween Component *)
+type Tween =
     {
         Min : float;
         Max : float;
@@ -189,7 +182,7 @@ type ScaleAnimation =
         Active : bool;
     }
 (** Create a Scale Animation Component *)
-let CreateScaleAnimation(min: float, max: float, speed: float, repeat: bool, active: bool) =
+let CreateTween(min: float, max: float, speed: float, repeat: bool, active: bool) =
     {
         Min = min;
         Max = max;
@@ -261,15 +254,14 @@ type Entity =
         Sprite          : PIXI.Sprite option;   (* Sprite *)
         Scale           : PIXI.Point option;    (* Display Scale *)
         Tint            : Color option;         (* Color to use as tint *)
-        Bounds          : int option;
-        Expires         : float option;
-        Health          : Health option;
-        ScaleAnimation  : ScaleAnimation option;
-        Size            : PIXI.Point;          
-        Velocity        : PIXI.Point option;
+        Bounds          : int option;           (* For Hit Detection *)
+        Expires         : float option;         (* Entity duration *)
+        Health          : Health option;        (* Points *)
+        Tween           : Tween option;         (* Explosion tweens *)
+        Size            : PIXI.Point;           (* Sprite size *)
+        Velocity        : PIXI.Point option;    (* Movement speed *)
     }
 
-//PIXI.Sprite(unbox this.Content?background?texture)
 (** Create a Player Entity *)
 let CreatePlayer (content:obj, x: float, y: float) =
     let position = PIXI.Point(0., 0.)
@@ -290,7 +282,7 @@ let CreatePlayer (content:obj, x: float, y: float) =
         Expires = None;
         Health = Some(CreateHealth(100, 100));
         Velocity = Some(PIXI.Point(0., 0.));
-        ScaleAnimation = None;
+        Tween = None;
         Size = PIXI.Point(float sprite.width, float sprite.height);
     }
      
@@ -314,7 +306,7 @@ let CreateBullet (content:obj, x: float, y: float) =
         Expires = Some(0.1);
         Health = None;
         Velocity = Some(PIXI.Point(0., -800.));
-        ScaleAnimation = None;
+        Tween = None;
         Size = PIXI.Point(float sprite.width, float sprite.height);
     }
 
@@ -338,7 +330,7 @@ let CreateEnemy1 (content:obj, width: int, height: int)  =
         Expires = None
         Health = Some(CreateHealth(10, 10));
         Velocity = Some(PIXI.Point(0., 40.));
-        ScaleAnimation = None;
+        Tween = None;
         Size = PIXI.Point(float sprite.width, float sprite.height);
     }
 (** Create Enemy *)
@@ -361,7 +353,7 @@ let CreateEnemy2 (content:obj, width: int, height: int) =
         Expires = None
         Health = Some(CreateHealth(20, 20));
         Velocity = Some(PIXI.Point(0., 30.));
-        ScaleAnimation = None;
+        Tween = None;
         Size = PIXI.Point(float sprite.width, float sprite.height);
     }
 
@@ -385,7 +377,7 @@ let CreateEnemy3 (content:obj, width: int, height: int)  =
         Expires = None
         Health = Some(CreateHealth(60, 60));
         Velocity = Some(PIXI.Point(0., 20.));
-        ScaleAnimation = None;
+        Tween = None;
         Size = PIXI.Point(float sprite.width, float sprite.height);
     }
 
@@ -409,7 +401,7 @@ let CreateExplosion (content:obj, x: float, y: float, scale:float) =
         Expires = Some(0.5);
         Health = None;
         Velocity = None;
-        ScaleAnimation = Some(CreateScaleAnimation(scale/100., scale, -3., false, true));
+        Tween = Some(CreateTween(scale/100., scale, -3., false, true));
         Size = PIXI.Point(float sprite.width, float sprite.height);
     }
 
@@ -432,7 +424,7 @@ let CreateBang (content:obj, x: float, y: float, scale:float) =
         Expires = Some(0.5);
         Health = None;
         Velocity = None;
-        ScaleAnimation = Some(CreateScaleAnimation(scale/100., scale, -3., false, true));
+        Tween = Some(CreateTween(scale/100., scale, -3., false, true));
         Size = PIXI.Point(float sprite.width, float sprite.height);
     }
 
@@ -652,7 +644,6 @@ let CollisionSystem (game:EcsGame) entities =
     let findCollision a b =
         match a.EntityType, a.Active, b.EntityType, b.Active with
         | EntityType.Enemy, true, EntityType.Bullet, true -> 
-            //game.AddExplosion(b.Position.X, b.Position.Y, 0.25f)
             game.AddBang(b.Position.x, b.Position.y, 1.0)
             game.RemoveEntity(b.Id)
             match a.Health with
@@ -703,8 +694,6 @@ let mutable enemyT2 = float(Timers.Timer2)
 let mutable enemyT3 = float(Timers.Timer3)
 
 let EnemySpawningSystem (delta:float, game:EcsGame)  =
-
-    //let igame = game:>IGame
     let spawnEnemy (t:float, enemy) =
         let delta = t - delta
 
@@ -730,7 +719,7 @@ let InputSystem (delta:float, mobile:bool, game:EcsGame) entity =
     | EntityType.Player -> 
 
         let position =
-            let newPosition = Mouse.mousePosition
+            let newPosition = Mouse.position
             if Keyboard.isPressed 90 then
                 timeToFire <- timeToFire - delta
                 if timeToFire <= 0.0 then
@@ -739,7 +728,7 @@ let InputSystem (delta:float, mobile:bool, game:EcsGame) entity =
                     timeToFire <- 0.1
                 newPosition
             else
-                if Mouse.mouseDown then
+                if Mouse.down then
                     timeToFire <- timeToFire - delta
                     if timeToFire <= 0.0 then
                         game.AddBullet(newPosition.x-27.0, newPosition.y)
@@ -797,9 +786,9 @@ let RemoveOffscreenShipsSystem (game:EcsGame, width: int, height: int) entity =
         }
     | _ -> entity
 
-(** src:Systems/ScaleAnimationSystem.fs *)
-let ScaleAnimationSystem (delta:float, game:EcsGame) entity =
-    match (entity.Scale, entity.ScaleAnimation, entity.Active) with
+(** src:Systems/TweenSystem.fs *)
+let TweenSystem (delta:float, game:EcsGame) entity =
+    match (entity.Scale, entity.Tween, entity.Active) with
     | Some(scale), Some(sa), true ->        
         let mutable x = scale.x + (sa.Speed * delta)
         let mutable y =  scale.y + (sa.Speed * delta)
@@ -816,7 +805,7 @@ let ScaleAnimationSystem (delta:float, game:EcsGame) entity =
         {
             entity with
                 Scale = Some(PIXI.Point(x, y));
-                ScaleAnimation = Some(CreateScaleAnimation(sa.Min, sa.Max, sa.Speed, sa.Repeat, active));
+                Tween = Some(CreateTween(sa.Min, sa.Max, sa.Speed, sa.Repeat, active));
         }
 
     | _ -> 
@@ -847,7 +836,7 @@ type ShmupWarz(height, width0, mobile) as this =
     let scaleY = (float) (height / 480.) // pixelFactor
 
     (** Draw the sprite for an Entity *)
-    let DrawSprite(spriteBatch:PIXI.Container) (entity) =
+    let drawSprite(spriteBatch:PIXI.Container) (entity) =
         match entity.Sprite with
         | Some sprite ->
             let scale =
@@ -858,8 +847,9 @@ type ShmupWarz(height, width0, mobile) as this =
                 match entity.Tint with 
                 | Some(color) -> color
                 | None -> Color.White
+            sprite.tint <- float color
             sprite.x <- entity.Position.x
-            sprite.y <- entity.Position.y-sprite.height/2.
+            sprite.y <- entity.Position.y
             sprite.scale <- scale
             spriteBatch.addChild(sprite) |> ignore
 
@@ -877,7 +867,7 @@ type ShmupWarz(height, width0, mobile) as this =
         this.spriteBatch.addChild(bgdImage.Value) |> ignore
         ActiveEntities(entities.Value)
         |> List.sortBy(fun e -> e.Layer) 
-        |> List.iter(DrawSprite(this.spriteBatch))
+        |> List.iter(drawSprite(this.spriteBatch))
         ()
 
     override this.Update(gameTime) =
@@ -893,7 +883,7 @@ type ShmupWarz(height, width0, mobile) as this =
                  |> List.map(EntitySystem(this, int width, int height))
                  |> List.map(MovementSystem(delta))
                  |> List.map(ExpiringSystem(delta))
-                 |> List.map(ScaleAnimationSystem(delta, this))
+                 |> List.map(TweenSystem(delta, this))
                  |> List.map(RemoveOffscreenShipsSystem(this, int width, int height))
                  |> CollisionSystem(this)
                  )
@@ -929,7 +919,7 @@ type ShmupWarz(height, width0, mobile) as this =
 
 Keyboard.init()
 Mouse.init()
-let game = ShmupWarz(320., 480., false)
+let game = ShmupWarz(320.*1.5, 480.*1.5, false)
 game.Run()
 
 
